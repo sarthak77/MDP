@@ -44,8 +44,7 @@ for i in range (rows):
     Policy.append(["-"]*cols)
 Temp_Utility = deepcopy(Utility)
 
-discount_factor = 1
-# discount_factor = .99
+discount_factor = .99
 # discount_factor = .1
 
 error_factor = .01
@@ -81,7 +80,7 @@ def best_action_select(x,y):
             temp_val += .1*Utility[x][y+1]
         else:
             temp_val += .1*Utility[x][y]
-        temp_val += unit_step_reward
+        #temp_val += unit_step_reward
 
         prevbestvalue=best_val
         best_val = max(best_val,temp_val)
@@ -98,7 +97,7 @@ def best_action_select(x,y):
             temp_val += .1*Utility[x][y+1]
         else:
             temp_val += .1*Utility[x][y]
-        temp_val += unit_step_reward
+        #temp_val += unit_step_reward
 
         prevbestvalue=best_val
         best_val = max(best_val,temp_val)
@@ -115,7 +114,7 @@ def best_action_select(x,y):
             temp_val += .1*Utility[x-1][y]
         else:
             temp_val += .1*Utility[x][y]
-        temp_val += unit_step_reward
+        #temp_val += unit_step_reward
         
         prevbestvalue=best_val
         best_val = max(best_val,temp_val)
@@ -132,7 +131,7 @@ def best_action_select(x,y):
             temp_val += .1*Utility[x-1][y]
         else:
             temp_val += .1*Utility[x][y]
-        temp_val += unit_step_reward
+        #temp_val += unit_step_reward
 
         prevbestvalue=best_val
         best_val = max(best_val,temp_val)
@@ -151,20 +150,27 @@ def check_end(x,y):
 def init_utility():
     global Utility
     global Temp_Utility
+    global state_values
     for i in range(rows):
         for j in range(cols):
             if(check_end(i,j)==True):
                 Utility[i][j] = state_values[i][j]
     Temp_Utility = deepcopy(Utility)
-
+    for i in range(rows):
+        for j in range(cols):
+            if(check_possible(i,j) == False or check_end(i,j) == True):
+                continue
+            else:
+                state_values[i][j] = unit_step_reward
 def value_iteration():
     iter = 0
     while(True):
         iter+=1
-        #print(iter)
+        print(iter)
         global Utility
         global Temp_Utility
         global Policy
+        global state_values
         Utility = deepcopy(Temp_Utility)
         delta = -100
         for i in range (rows):
